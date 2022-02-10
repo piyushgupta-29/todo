@@ -2,11 +2,11 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-const cors = require('cors')
+// const cors = require('cors')
 
-app.use(cors({
-    origin: "http://localhost:3000"
-}))
+// app.use(cors({
+//     origin: "http://localhost:3000"
+// }))
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE;
 mongoose.connect(DB).then(()=>{ console.log("Connection Successful") }).catch((err)=>{ console.log("Connection Unsuccessful") });
@@ -23,18 +23,18 @@ const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 
-app.get('/',async (req,res) => {
+app.get('/getdata',async (req,res) => {
     try{
         const data = await Task.find({});
         res.send(data);
-        // console.log('data loaded successfully');
+        console.log('data loaded successfully');
     }
     catch(err){
         console.log('failed to load data');
     }
 });
 
-app.post('/',async (req,res) => {
+app.post('/insertdata',async (req,res) => {
     try{
         const { x } = req.body;
         const data = new Task({ title: x });
@@ -46,26 +46,26 @@ app.post('/',async (req,res) => {
     }
 })
 
-app.put('/:id',async (req,res) => {
+app.put('/updatedata',async (req,res) => {
     try{
         const item = req.body.x;
-        const data = await Task.updateOne({_id: req.params.id},{$set: {title: item}});
+        const data = await Task.updateOne({_id: req.body.elemId },{$set: {title: item}});
         res.send(data);
         console.log('updated successfully');
     }
     catch(err){
-        console.log('failed to update data')
+        console.log('failed to update data');
     }
 })
 
-app.delete('/:id',async (req,res) => {
+app.delete('/deletedata',async (req,res) => {
     try{
-        const data = await Task.deleteOne({_id: req.params.id});
+        // console.log(req.body);
+        const data = await Task.deleteOne({_id: req.body.id});
         res.send(data);
         console.log('deleted successfully');
     }
     catch(err){
-        console.log(req.params.id);
         console.log('failed to delete data');
     }
 })

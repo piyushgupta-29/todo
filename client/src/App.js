@@ -14,8 +14,16 @@ const App = () => {
   
     const userHomePage = async () => {
         try {
-            const res = await axios.get('http://localhost:8000/');
-            setNewItem(res.data);
+            const res = await fetch("/getdata", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            console.log(res);
+            const result = await res.json();
+            console.log(result);
+            setNewItem(result);
         } catch (err) {
             console.log(err);
         }
@@ -32,13 +40,14 @@ const App = () => {
             setNewItem([...newItem,{title: item}]);
             const x = item;
             setItem("");
-            const res = await fetch("http://localhost:8000/", {
+            const res = await fetch("/insertdata", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ x })
             });
+            console.log(res);
         }
         else if(item&&flag)
         {
@@ -54,12 +63,12 @@ const App = () => {
             setItem('');
             const elemId = itemId;
             setItemId(null);
-            const res = await fetch(`http://localhost:8000/${elemId}`,{
+            const res = await fetch(`/updatedata`,{
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ x })
+                body: JSON.stringify({ elemId, x })
             })
         }
         else 
@@ -77,7 +86,14 @@ const App = () => {
         setItemId(id);
     }
     const deleteIt = async (id) => {
-        await axios.delete(`http://localhost:8000/${id}`);
+
+        await fetch(`/deletedata`,{
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id })
+            })
         setNewItem((oldItems) => {
             return oldItems.filter( (val) => {
                 return val._id!==id;

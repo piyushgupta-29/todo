@@ -17,7 +17,7 @@
 }
 
 .center_div {
-  width: 25%;
+  width: 500px;
   height: 70vh;
   background-color: #f4f4f4;
   box-shadow: 5px 5px 25px -5px rgba(0, 0, 0, 0.5);
@@ -96,6 +96,7 @@ ol li {
 
 .del_up_btn{
   min-width: 50px;
+  cursor: pointer;
 }
 .todo_style .deleteIcon {
   width: 25px;
@@ -134,7 +135,7 @@ ol li {
   color: crimson;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .center_div {
     width: 55%;
   }
